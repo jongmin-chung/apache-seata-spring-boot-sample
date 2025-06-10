@@ -1,0 +1,22 @@
+services:
+  postgres:
+    container_name: shipping-api
+    image: postgres:15
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: shippingDb
+      POSTGRES_USER: pgUser
+      POSTGRES_PASSWORD: pgPassword
+    ports:
+      - "5432:5432"
+    volumes:
+      - pg_data:/var/lib/postgresql/data
+      - ./seata-client-config/script.sql:/docker-entrypoint-initdb.d/init.sql:ro
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U pgUser -d"]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+
+volumes:
+  pg_data:

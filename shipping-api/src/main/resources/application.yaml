@@ -1,0 +1,136 @@
+seata:
+  enabled: true
+  data-source-proxy-mode: AT
+  enable-auto-data-source-proxy: true
+  application-id:  ${spring.application.name}
+  tx-service-group: default_tx_group
+  service:
+    vgroup-mapping:
+      default_tx_group: default
+    grouplist:
+      default: 127.0.0.1:8091
+
+spring:
+  threads:
+    virtual:
+      enabled: true
+  jackson:
+    time-zone: "Europe/Rome"
+  docker:
+    compose:
+      enabled: true
+      file: ./docker/docker-compose.yml
+  sql:
+    init:
+      mode: always
+  jpa:
+    open-in-view: false
+    defer-datasource-initialization: true
+    hibernate:
+      ddl-auto: create-drop
+    show-sql: true
+  datasource:
+    url: jdbc:postgresql://localhost:5432/shippingDb
+    username: pgUser
+    password: pgPassword
+    driver-class-name: org.postgresql.Driver
+    hikari:
+      minimum-idle: 1
+      maximum-pool-size: 20
+      idle-timeout: 30000
+      pool-name: shipping-postgres-pool
+      max-life-time: 200000
+      connection-timeout: 30000
+      validation-timeout: 30000
+      leak-detection-threshold: 31000
+      connection-test-query: "select 1"
+  application:
+    name: shipping-api
+
+management:
+  observations:
+    annotations:
+      enabled: true
+    key-values:
+      application: ${spring.application.name}
+      env: local
+  otlp:
+    metrics:
+      export:
+        enabled: false
+    tracing:
+      export:
+        enabled: true
+      endpoint: "http://localhost:4317"
+      compression: gzip
+      timeout: 20s
+      transport: grpc
+  tracing:
+    enabled: true
+    sampling:
+      probability: 1
+  metrics:
+    dgs-graphql:
+      enabled: true
+      tag-customizers:
+        outcome:
+          enabled: true
+      data-loader-instrumentation:
+        enabled: true
+      query:
+        enabled: true
+      query-signature:
+        enabled: true
+        caching:
+          enabled: true
+    distribution:
+      percentiles:
+        - 0.95
+      percentiles-histogram:
+        all: true
+        http:
+          server:
+            requests: true
+  prometheus:
+    metrics:
+      export:
+        enabled: true
+        step: 1m
+  endpoints:
+    access:
+      default: none
+    jmx:
+      exposure:
+        exclude: '*'
+    web:
+      exposure:
+        include:
+          - health
+          - prometheus
+          - metrics
+  endpoint:
+    health:
+      access: unrestricted
+      logging:
+        slow-indicator: 5s
+      probes:
+        enabled: true
+    info:
+      access: none
+    prometheus:
+      access: unrestricted
+    metrics:
+      access: unrestricted
+  health:
+    defaults:
+      enabled: false
+    db:
+      enabled: true
+
+server:
+  port: 8082
+  servlet:
+    encoding:
+      charset: UTF-8
+      force-request: true
+      force-response: true

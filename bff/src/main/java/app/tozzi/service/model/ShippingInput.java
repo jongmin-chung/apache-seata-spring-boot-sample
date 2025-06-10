@@ -1,0 +1,15 @@
+package app.tozzi.service.model;
+
+import jakarta.validation.constraints.Digits;
+import jakarta.validation.constraints.NotNull;
+import lombok.Data;
+
+import java.math.BigDecimal;
+
+@Data
+public class ShippingInput {
+
+    @NotNull
+    @Digits(integer = 15, fraction = 2)
+    private BigDecimal cost;
+}

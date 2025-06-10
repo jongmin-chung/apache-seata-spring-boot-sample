@@ -1,0 +1,77 @@
+services:
+  mysql:
+    image: mysql:8.0.33
+    container_name: mysql-seata
+    environment:
+      MYSQL_ROOT_PASSWORD: rootpass
+      MYSQL_DATABASE: seata
+      MYSQL_USER: seata_user
+      MYSQL_PASSWORD: seata_pass
+    ports:
+      - "3317:3306"
+    volumes:
+      - mysql_data:/var/lib/mysql
+      - ./docker/seata/mysql.sql:/docker-entrypoint-initdb.d/seata.sql:ro
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-uroot", "-prootpass"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  seata-server:
+    image: apache/seata-server:2.3.0
+    container_name: seata-server
+    depends_on:
+      mysql:
+        condition: service_healthy
+    environment:
+      - SEATA_CONFIG_NAME=application.yml
+    volumes:
+      - "./docker/seata/resources/application.yml:/seata-server/resources/application.yml"
+      - "./docker/seata/mysql-connector-j-8.0.33.jar:/seata-server/libs/mysql-connector-j-8.0.33.jar"
+    ports:
+      - "7091:7091"
+      - "8091:8091"
+
+  tempo:
+    container_name: tempo
+    image: grafana/tempo
+    extra_hosts: [ 'host.docker.internal:host-gateway' ]
+    command: [ "-config.file=/etc/tempo.yaml" ]
+    volumes:
+      - ./docker/tempo/tempo-local.yaml:/etc/tempo.yaml:ro
+      - ./tempo-data:/tmp/tempo
+    ports:
+      - "14268"
+      - "9411:9411"
+      - "4317:4317"
+      - "4318:4318"
+
+  prometheus:
+    container_name: prometheus
+    image: prom/prometheus
+    extra_hosts: [ 'host.docker.internal:host-gateway' ]
+    command:
+      - --enable-feature=exemplar-storage
+      - --config.file=/etc/prometheus/prometheus.yml
+    volumes:
+      - ./docker/prometheus/prometheus.yml:/etc/prometheus/prometheus.yml:ro
+    ports:
+      - "9090:9090"
+
+  grafana:
+    container_name: grafana
+    image: grafana/grafana
+    extra_hosts: [ 'host.docker.internal:host-gateway' ]
+    volumes:
+      - ./docker/grafana/provisioning/datasources:/etc/grafana/provisioning/datasources:ro
+      - ./docker/grafana/provisioning/dashboards:/etc/grafana/provisioning/dashboards:ro
+    environment:
+      - GF_AUTH_ANONYMOUS_ENABLED=true
+      - GF_AUTH_ANONYMOUS_ORG_ROLE=Admin
+      - GF_AUTH_DISABLE_LOGIN_FORM=true
+    ports:
+      - "3000:3000"
+
+volumes:
+  mysql_data:

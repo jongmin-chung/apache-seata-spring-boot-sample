@@ -1,0 +1,50 @@
+server:
+  port: 7091
+
+spring:
+  application:
+    name: seata-server
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://mysql:3306/seata
+    username: seata_user
+    password: seata_pass
+
+logging:
+  config: classpath:logback-spring.xml
+  file:
+    path: ${log.home:${user.home}/logs/seata}
+
+console:
+  user:
+    username: seata
+    password: seata
+
+seata:
+  security:
+    secretKey: seata
+    tokenValidityInMilliseconds: 1800000
+
+  config:
+    type: file
+
+  registry:
+    type: file
+
+  store:
+    mode: db
+    db:
+      dbType: mysql
+      driver-class-name: com.mysql.cj.jdbc.Driver
+      url: jdbc:mysql://mysql:3306/seata
+      user: seata_user
+      password: seata_pass
+      min-conn: 10
+      max-conn: 100
+      global-table: global_table
+      branch-table: branch_table
+      lock-table: lock_table
+      distributed-lock-table: distributed_lock
+      vgroup-table: vgroup_table
+      query-limit: 1000
+      max-wait: 5000
