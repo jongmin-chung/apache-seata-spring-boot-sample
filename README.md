@@ -3,7 +3,7 @@
 
 Example of Apache Seata-managed distributed transactions across multiple Spring Boot microservices
 
-  
+![image](https://github.com/user-attachments/assets/2ceffe93-ca6f-4288-80f7-1f4f693fe87b)
 
 ## Setup
 
