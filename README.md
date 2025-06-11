@@ -14,8 +14,8 @@ Go to *infra* folder:
 
 This will start:
 
-- maria-db (with the tables needed for seata-server).
-- seata-server.
+- MariaDB (with the tables needed for Seata Server).
+- Seata Server.
 - Grafana, Prometheus and Tempo for observability.
 
 #### Microservices
