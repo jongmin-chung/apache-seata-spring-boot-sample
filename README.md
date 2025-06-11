@@ -1,7 +1,7 @@
 
 # Seata the deal: no more distributed transaction nightmares across (Spring Boot) microservices
 
-Example of Apache Seata-managed distributed transactions across multiple Spring Boot microservices
+[Example of Apache Seata-managed distributed transactions across multiple Spring Boot microservices](https://medium.com/@biagio.tozzi/seata-the-deal-no-more-distributed-transaction-nightmares-across-spring-boot-microservices-7155312032f5)
 
 ![image](https://github.com/user-attachments/assets/2ceffe93-ca6f-4288-80f7-1f4f693fe87b)
 
