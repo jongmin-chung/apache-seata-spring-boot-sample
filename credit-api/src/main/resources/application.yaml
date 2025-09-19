@@ -18,7 +18,7 @@ spring:
     time-zone: "Europe/Rome"
   docker:
     compose:
-      enabled: true
+      enabled: false
       file: ./docker/docker-compose.yml
   sql:
     init:
