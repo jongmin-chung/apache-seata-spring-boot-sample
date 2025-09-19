@@ -109,3 +109,8 @@ server:
       charset: UTF-8
       force-request: true
       force-response: true
+
+s3:
+  endpoint: http://localhost:9000
+  access-key-id: minioadmin
+  secret-access-key: minioadmin

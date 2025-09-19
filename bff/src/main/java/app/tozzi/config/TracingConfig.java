@@ -18,7 +18,7 @@ public class TracingConfig {
 
     @Bean
     public ObservationPredicate noRootlessHttpObservations() {
-        return (name, context) -> {
+        return (_, context) -> {
             var requestAttributes = RequestContextHolder.getRequestAttributes();
             if (requestAttributes instanceof ServletRequestAttributes servletRequestAttributes) {
                 var observation = (Observation) requestAttributes.getAttribute(ServerHttpObservationFilter.class.getName() + ".observation", SCOPE_REQUEST);

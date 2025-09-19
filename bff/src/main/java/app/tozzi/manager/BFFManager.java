@@ -4,9 +4,9 @@ import app.tozzi.model.ShippingResult;
 import app.tozzi.service.CreditService;
 import app.tozzi.service.ShippingService;
 import io.micrometer.observation.annotation.Observed;
+import jakarta.annotation.Resource;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.seata.spring.annotation.GlobalTransactional;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
@@ -16,10 +16,10 @@ import java.math.BigDecimal;
 @Observed(contextualName = "manager")
 public class BFFManager {
 
-    @Autowired
+    @Resource
     private CreditService creditService;
 
-    @Autowired
+    @Resource
     private ShippingService shippingService;
 
     @GlobalTransactional
